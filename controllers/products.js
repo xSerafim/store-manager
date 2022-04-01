@@ -23,7 +23,7 @@ async function productById(req, res) {
     const product = await getProductById(id);
     if (!product[0]) return res.status(NOT_FOUND).json({ message: 'Product not found' });
   
-    return res.status(HTTP_OK_STATUS).json(product);
+    return res.status(HTTP_OK_STATUS).json(...product);
   } catch (error) {
     console.log(error);
   }
