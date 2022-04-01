@@ -9,7 +9,7 @@ async function getAllProducts() {
 
 async function getProductById(id) {
   const [result] = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE id=?;',
+    'SELECT * FROM StoreManager.products WHERE id = ?;',
     [id],
 );
   return result;
@@ -31,9 +31,20 @@ async function getAllSales() {
 }
 
 async function getSaleById(id) {
-  const allSales = await getAllSales();
-  const result = allSales.filter((e) => e.saleId === Number(id));
-  return result;
+  const [result] = await connection.execute(
+    `SELECT
+      sale_id AS saleId,
+      sale.date AS date,
+      product_id AS productId,
+      quantity
+    FROM StoreManager.sales_products AS sp
+    JOIN StoreManager.sales AS sale
+    ON sp.sale_id = sale.id
+    WHERE sp.sale_id = ?
+    ORDER BY saleId, productId;`,
+    [id],
+  );
+  return result;  
 }
 
 module.exports = {
