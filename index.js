@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const salesRouter = require('./routers/sales');
 const productsRouter = require('./routers/products');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 app.use(express.json());
@@ -13,8 +14,10 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use(salesRouter);
-app.use(productsRouter);
+app.use('/sales', salesRouter);
+app.use('/products', productsRouter);
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
