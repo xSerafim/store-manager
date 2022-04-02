@@ -1,11 +1,11 @@
 const productsModel = require('../models/productsModel');
 
-async function getAllProducts() {
-  const result = await productsModel.getAllProducts();
+async function allProducts() {
+  const result = await productsModel.allProducts();
   return result;
 }
 
-async function getProductById(id) {
+async function productById(id) {
   const result = await productsModel.getProductById(id);
   return result;
 }
@@ -21,8 +21,28 @@ async function createProduct({ name, quantity }) {
   return false;
 }
 
+async function updateProduct(id, name, quantity) {
+  const searchId = await productsModel.getProductById(id);
+
+  if (!searchId[0]) return false;
+
+  const updatedProduct = await productsModel.updateProduct(id, name, quantity);
+  return updatedProduct;
+}
+
+async function deleteProduct(id) {
+  const searchId = await productsModel.getProductById(id);
+
+  if (!searchId[0]) return false;
+
+  await productsModel.deleteProduct(id);
+  return true;
+}
+
 module.exports = {
-  getAllProducts,
-  getProductById,
+  allProducts,
+  productById,
   createProduct,
+  updateProduct,
+  deleteProduct,
 };
