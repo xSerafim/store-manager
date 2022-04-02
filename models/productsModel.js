@@ -1,6 +1,6 @@
 const connection = require('./connection');
 
-async function getAllProducts() {
+async function allProducts() {
   const [result] = await connection.execute(
       'SELECT id, name, quantity FROM StoreManager.products ORDER BY id;',
   );
@@ -36,9 +36,31 @@ async function createProduct(name, quantity) {
   };
 }
 
+async function updateProduct(id, name, quantity) {
+  await connection.execute(
+    'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?;',
+    [name, quantity, id],
+  );
+
+  return {
+    id,
+    name,
+    quantity,
+  };
+}
+
+async function deleteProduct(id) {
+  await connection.execute(
+    'DELETE FROM StoreManager.products WHERE id = ?;',
+    [id],
+  );
+}
+
 module.exports = {
-  getAllProducts,
+  allProducts,
   getProductById,
   findProductByName,
   createProduct,
+  updateProduct,
+  deleteProduct,
 };
