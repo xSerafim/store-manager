@@ -10,7 +10,19 @@ async function getProductById(id) {
   return result;
 }
 
+async function createProduct({ name, quantity }) {
+  const productAlreadyExists = await productsModel.findProductByName(name);
+
+  if (productAlreadyExists.length === 0) {
+    const result = await productsModel.createProduct(name, quantity);
+    return result;
+  }
+  
+  return false;
+}
+
 module.exports = {
   getAllProducts,
   getProductById,
+  createProduct,
 };
