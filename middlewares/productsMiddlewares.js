@@ -1,0 +1,23 @@
+const JOI = require('joi');
+
+const productSchema = JOI.object({
+  name: JOI.string().min(5).required().messages({
+    'string.min': '422*"name" length must be at least 5 characters long',
+    'any.required': '400*"name" is required',
+  }),
+  quantity: JOI.number().min(1).required().messages({
+    'number.min': '422*"quantity" must be greater than or equal to 1',
+    'any.required': '400*"quantity" is required',
+  }),
+});
+
+function validateProduct(req, _res, next) {
+  const { error } = productSchema.validate(req.body);
+  if (error) throw error;
+
+  next();
+}
+
+module.exports = {
+  validateProduct,
+};
