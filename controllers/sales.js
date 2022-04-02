@@ -15,7 +15,7 @@ function serverError(res, error) {
 async function allSales(_req, res) {
   try {
     const sales = await getAllSales();
-      return res.status(HTTP_OK_STATUS).json(sales);
+    return res.status(HTTP_OK_STATUS).json(sales);
   } catch (error) {
     return serverError(res, error);
   }
