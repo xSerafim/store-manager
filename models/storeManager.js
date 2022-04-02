@@ -15,6 +15,27 @@ async function getProductById(id) {
   return result;
 }
 
+async function findProductByName(name) {
+  const [result] = await connection.execute(
+    'SELECT name FROM StoreManager.products WHERE name = ?;',
+    [name],
+  );
+  return result;
+}
+
+async function createProduct(name, quantity) {
+  const [{ insertId }] = await connection.execute(
+    'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?);',
+    [name, quantity],
+  );
+
+  return {
+    id: insertId,
+    name,
+    quantity,
+  };
+}
+
 async function getAllSales() {
   const [result] = await connection.execute(
       `SELECT
@@ -50,6 +71,8 @@ async function getSaleById(id) {
 module.exports = {
   getAllProducts,
   getProductById,
+  findProductByName,
+  createProduct,
   getAllSales,
   getSaleById,
 };
