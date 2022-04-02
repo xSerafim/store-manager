@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router
-  .get('/sales', allSales)
-  .get('/sales/:id', saleById);
+  .get('/', allSales)
+  .get('/:id', saleById);
 
 module.exports = router;
