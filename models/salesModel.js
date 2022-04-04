@@ -46,17 +46,32 @@ async function registerSale(sales) {
 
   const bodyObj = {
     id: Number(insertId),
-    itemsSold: sales.map(({ productId, quantity }) => ({ productId, quantity })),
+    itemsSold: sales,
   };
   return bodyObj;
 }
 
-// async function updateSale(id, sale) {
+async function updateSale(id, sales) {
+  sales.forEach(async ({ productId, quantity }) => {
+    await connection.execute(`
+      UPDATE sales_products
+      SET quantity = ?, product_id = ? 
+      WHERE sale_id = ?
+      AND product_id = ?;`,
+      [quantity, productId, Number(id), productId]);
+  });
 
-// }
+  const updatedObj = {
+    saleId: Number(id),
+    itemUpdated: sales,
+  };
+
+  return updatedObj;
+}
 
 module.exports = {
   getAllSales,
   getSaleById,
   registerSale,
+  updateSale,
 };
