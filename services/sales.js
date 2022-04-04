@@ -24,9 +24,19 @@ async function updateSale(id, sales) {
   return result;
 }
 
+async function deleteSale(id) {
+  const saleExists = await getSaleById(id);
+
+  if (!saleExists[0]) return false;
+
+  await salesModel.deleteSale(id);
+  return true;
+}
+
 module.exports = {
   getAllSales,
   getSaleById,
   registerSale,
   updateSale,
+  deleteSale,
 };
