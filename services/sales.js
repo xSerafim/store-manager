@@ -15,8 +15,18 @@ async function registerSale(sales) {
   return result;
 }
 
+async function updateSale(id, sales) {
+  const saleExists = await getSaleById(id);
+
+  if (!saleExists[0]) return false;
+
+  const result = await salesModel.updateSale(id, sales);
+  return result;
+}
+
 module.exports = {
   getAllSales,
   getSaleById,
   registerSale,
+  updateSale,
 };
