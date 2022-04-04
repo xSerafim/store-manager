@@ -2,6 +2,7 @@ const {
   getAllSales,
   getSaleById,
   registerSale,
+  updateSale,
 } = require('../services/sales');
 
 const HTTP_OK_STATUS = 200;
@@ -47,8 +48,21 @@ async function registerNewSale(req, res) {
   }
 }
 
+async function updtSale(req, res) {
+  try {
+    const { id } = req.params;
+    const sales = req.body;
+    const updatedSale = await updateSale(id, sales);
+    if (updatedSale) return res.status(HTTP_OK_STATUS).json(updatedSale);
+    return res.status(NOT_FOUND).json({ message: 'Sale not found' });
+  } catch (error) {
+    return serverError(res, error);
+  }
+} 
+
 module.exports = {
   allSales,
   saleById,
   registerNewSale,
+  updtSale,
 };
