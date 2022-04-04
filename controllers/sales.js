@@ -3,10 +3,12 @@ const {
   getSaleById,
   registerSale,
   updateSale,
+  deleteSale,
 } = require('../services/sales');
 
 const HTTP_OK_STATUS = 200;
 const CREATED_STATUS = 201;
+const NO_CONTENT = 204;
 const SERVER_ERROR = 500;
 const NOT_FOUND = 404;
 
@@ -58,11 +60,23 @@ async function updtSale(req, res) {
   } catch (error) {
     return serverError(res, error);
   }
-} 
+}
+
+async function delSale(req, res) {
+  try {
+    const { id } = req.params;
+    const sale = deleteSale(id);
+    if (sale) return res.status(NO_CONTENT).end();
+    return res.status(NOT_FOUND).json({ message: 'Sale not found' }); 
+  } catch (error) {
+    return serverError(res, error);
+  }
+}
 
 module.exports = {
   allSales,
   saleById,
   registerNewSale,
   updtSale,
+  delSale,
 };
