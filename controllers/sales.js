@@ -1,9 +1,11 @@
 const {
   getAllSales,
   getSaleById,
+  registerSale,
 } = require('../services/sales');
 
 const HTTP_OK_STATUS = 200;
+const CREATED_STATUS = 201;
 const SERVER_ERROR = 500;
 const NOT_FOUND = 404;
 
@@ -35,7 +37,18 @@ async function saleById(req, res) {
   }
 }
 
+async function registerNewSale(req, res) {
+  try {
+    const sales = req.body;
+    const newSales = await registerSale(sales);
+    return res.status(CREATED_STATUS).json(newSales);
+  } catch (error) {
+    return serverError(res, error);
+  }
+}
+
 module.exports = {
   allSales,
   saleById,
+  registerNewSale,
 };
