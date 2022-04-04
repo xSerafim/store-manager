@@ -7,7 +7,7 @@ const productSchema = JOI.object({
     'any.required': '400*"name" is required',
   }),
   quantity: JOI.number().min(1).required().messages({
-    'number.base': '400*"quantity" must be a string',
+    'number.base': '400*"quantity" must be a number',
     'number.min': '422*"quantity" must be greater than or equal to 1',
     'any.required': '400*"quantity" is required',
   }),
