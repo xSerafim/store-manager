@@ -69,9 +69,17 @@ async function updateSale(id, sales) {
   return updatedObj;
 }
 
+async function deleteSale(id) {
+  await connection.execute(
+    'DELETE FROM sales WHERE id = ?;',
+    [id],
+  );
+}
+
 module.exports = {
   getAllSales,
   getSaleById,
   registerSale,
   updateSale,
+  deleteSale,
 };
