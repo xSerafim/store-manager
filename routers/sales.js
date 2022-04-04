@@ -5,6 +5,7 @@ const {
   saleById,
   registerNewSale,
   updtSale,
+  delSale,
 } = require('../controllers/sales');
 
 const { validateProduct } = require('../middlewares/salesMiddlewares');
@@ -17,6 +18,7 @@ router
   .post('/', validateProduct,
     registerNewSale)
   .put('/:id', validateProduct,
-    updtSale);
+    updtSale)
+  .delete('/:id', delSale);
 
 module.exports = router;
