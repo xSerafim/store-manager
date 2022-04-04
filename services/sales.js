@@ -10,7 +10,13 @@ async function getSaleById(id) {
   return result;
 }
 
+async function registerSale(sales) {
+  const result = await salesModel.registerSale(sales);
+  return result;
+}
+
 module.exports = {
   getAllSales,
   getSaleById,
+  registerSale,
 };
