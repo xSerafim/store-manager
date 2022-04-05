@@ -56,6 +56,14 @@ async function deleteProduct(id) {
   );
 }
 
+async function updateQuantity(sales) {
+  sales.forEach(async ({ id, quantity }) => {
+    await connection
+      .execute('UPDATE products SET quantity = ? WHERE id = ?;',
+      [quantity, id]);
+  });
+}
+
 module.exports = {
   allProducts,
   getProductById,
@@ -63,4 +71,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  updateQuantity,
 };
