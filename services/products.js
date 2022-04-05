@@ -39,10 +39,31 @@ async function deleteProduct(id) {
   return true;
 }
 
+async function updateQuantity(sales, operation) {
+  const productsById = sales.map((sale) => productById(sale.productId));
+  const resolvedPromise = await Promise.all(productsById);
+
+  if (operation === 'deleteSale') {
+    const sumQuantity = sales.map((sale, index) => (
+      { id: sale.productId,
+        quantity: resolvedPromise.flat()[index].quantity + sale.quantity,
+      }));
+    productsModel.updateQuantity(sumQuantity);
+  }
+  if (operation === 'registerSale') {
+    const subQuantity = sales.map((sale, index) => (
+      { id: sale.productId,
+        quantity: resolvedPromise.flat()[index].quantity - sale.quantity,
+      }));
+    productsModel.updateQuantity(subQuantity);
+  }
+}
+
 module.exports = {
   allProducts,
   productById,
   createProduct,
   updateProduct,
   deleteProduct,
+  updateQuantity,
 };
