@@ -16,7 +16,7 @@ const newProduct = { id: 4, name: 'Laço da Verdade', quantity: 15 };
 
 const productInfos = [4, 'Laço da Verdade', 15];
 
-const insertId = [{insertId: 4}]
+const insertId = [{insertId: 4}];
 
 const sales = [{ id: 1, quantity: 5 }, { id: 3, quantity: 18 }];
 
