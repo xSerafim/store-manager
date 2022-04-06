@@ -103,7 +103,7 @@ describe('Testa productsModel', () => {
     after(() => {
       connection.execute.restore();
     });
-    it('Retorna um objeto', async () => {
+    it('Connection é chamado', async () => {
       await model.updateQuantity(mocks.sales);
       expect(connection.execute.calledTwice).to.be.true;
     });
