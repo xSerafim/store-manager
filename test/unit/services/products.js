@@ -64,29 +64,84 @@ describe('Testa camada de services products', () => {
       });
     });
     describe('Caso o nome não exista', () => {
+      before(() => {
+        const stub = sinon.stub(connection, 'execute');
+        stub
+          .onCall(0)
+          .resolves([[]])
+          .onCall(1)
+          .resolves([{insertId: 1}]);
+      });
       afterEach(() => {
         connection.execute.restore();
       });
-
-      it('Connection é chamado duas vezes', async () => {
-        sinon.stub(connection, 'execute').resolves([[]]);
-
-        await services.createProduct(mocks.product);
+      it('retorna o objeto esperado', async () => {
+        const product = await services.createProduct(...mocks.product);
         expect(connection.execute.calledTwice).to.be.true;
+        expect(product).to.be.deep.equal(...mocks.product);
       });
-      // it('retorna um array vazio na primeira chamada e o objeto esperado na segunda', async () => {
-      //   const stub = sinon.stub(connection, 'execute');
-      //   stub
-      //     .onCall(0)
-      //     .returns([])
-      //     .onCall(1)
-      //     .returns('Martelo de Thor', 10);
-
-      //   await services.createProduct(...mocks.product);
-      //   expect(stub(), []).to.be.true;
-      //   expect(connection.execute.returnThis(...mocks.product)).to.be.true;
-
-      // });
+    });
+  });
+  describe('Testa função updateProduct', () => {
+    describe('Caso o ID não exista', () => {
+      before(() => {
+        sinon.stub(connection, "execute").resolves([[]]);
+      });
+      after(() => {
+        connection.execute.restore();
+      });
+      it('Connection é chamado uma vez', async () => {
+        await services.updateProduct(mocks.product);
+        expect(connection.execute.calledOnce).to.be.true;
+      });
+      it('Retorna false', async () => {
+        const product = await services.updateProduct(mocks.product);
+        expect(product).to.be.false;
+      });
+    });
+    describe('Caso o ID exista', () => {
+      before(() => {
+        sinon.stub(connection, 'execute').resolves([[mocks.product]]);
+      });
+      after(() => {
+        connection.execute.restore();
+      });
+      it('retorna o objeto esperado', async () => {
+        const product = await services.updateProduct(1, 'Martelo de Thor', 10);
+        expect(connection.execute.calledTwice).to.be.true;
+        expect(product).to.be.deep.equal(...mocks.product);
+      });
+    });
+  });
+  describe('Testa função deleteProduct', () => {
+    describe('Caso o ID não exista', () => {
+      before(() => {
+        sinon.stub(connection, "execute").resolves([[]]);
+      });
+      after(() => {
+        connection.execute.restore();
+      });
+      it('Connection é chamado uma vez', async () => {
+        await services.deleteProduct(1);
+        expect(connection.execute.calledOnce).to.be.true;
+      });
+      it('Retorna false', async () => {
+        const product = await services.deleteProduct(1);
+        expect(product).to.be.false;
+      });
+    });
+    describe('Caso o ID exista', () => {
+      before(() => {
+        sinon.stub(connection, 'execute').resolves([[mocks.product]]);
+      });
+      after(() => {
+        connection.execute.restore();
+      });
+      it('retorna o objeto esperado', async () => {
+        const product = await services.deleteProduct(1);
+        expect(connection.execute.calledTwice).to.be.true;
+        expect(product).to.be.true;
+      });
     });
   });
 });
