@@ -62,66 +62,62 @@ describe('Testa camada de services sales', () => {
       expect(sales).to.be.deep.equal({ id: 4, itemsSold: mocks.newSale });
     });
   });
-  // describe('Testa função updateProduct', () => {
-  //   describe('Caso o ID não exista', () => {
-  //     before(() => {
-  //       sinon.stub(connection, "execute").resolves([[]]);
-  //     });
-  //     after(() => {
-  //       connection.execute.restore();
-  //     });
-  //     it('Connection é chamado uma vez', async () => {
-  //       await services.updateProduct(mocks.product);
-  //       expect(connection.execute.calledOnce).to.be.true;
-  //     });
-  //     it('Retorna false', async () => {
-  //       const product = await services.updateProduct(mocks.product);
-  //       expect(product).to.be.false;
-  //     });
-  //   });
-  //   describe('Caso o ID exista', () => {
-  //     before(() => {
-  //       sinon.stub(connection, 'execute').resolves([[mocks.product]]);
-  //     });
-  //     after(() => {
-  //       connection.execute.restore();
-  //     });
-  //     it('retorna o objeto esperado', async () => {
-  //       const product = await services.updateProduct(1, 'Martelo de Thor', 10);
-  //       expect(connection.execute.calledTwice).to.be.true;
-  //       expect(product).to.be.deep.equal(...mocks.product);
-  //     });
-  //   });
-  // });
-  // describe('Testa função deleteProduct', () => {
-  //   describe('Caso o ID não exista', () => {
-  //     before(() => {
-  //       sinon.stub(connection, "execute").resolves([[]]);
-  //     });
-  //     after(() => {
-  //       connection.execute.restore();
-  //     });
-  //     it('Connection é chamado uma vez', async () => {
-  //       await services.deleteProduct(1);
-  //       expect(connection.execute.calledOnce).to.be.true;
-  //     });
-  //     it('Retorna false', async () => {
-  //       const product = await services.deleteProduct(1);
-  //       expect(product).to.be.false;
-  //     });
-  //   });
-  //   describe('Caso o ID exista', () => {
-  //     before(() => {
-  //       sinon.stub(connection, 'execute').resolves([[mocks.product]]);
-  //     });
-  //     after(() => {
-  //       connection.execute.restore();
-  //     });
-  //     it('retorna o objeto esperado', async () => {
-  //       const product = await services.deleteProduct(1);
-  //       expect(connection.execute.calledTwice).to.be.true;
-  //       expect(product).to.be.true;
-  //     });
-  //   });
-  // });
+  describe('Testa função updateSale', () => {
+    describe('Caso o ID não exista', () => {
+      before(() => {
+        sinon.stub(connection, "execute").resolves([[]]);
+      });
+      after(() => {
+        connection.execute.restore();
+      });
+      it('Connection é chamado uma vez', async () => {
+        await services.updateSale(mocks.sale);
+        expect(connection.execute.calledOnce).to.be.true;
+      });
+      it('Retorna false', async () => {
+        const sale = await services.updateSale();
+        expect(sale).to.be.false;
+      });
+    });
+    describe('Caso o ID exista', () => {
+      before(() => {
+        sinon.stub(model, 'getSaleById').returns(mocks.sale);
+        sinon.stub(model, 'updateSale').returns({saleId: 1, itemUpdated: mocks.newSale});
+      });
+      after(() => {
+        model.getSaleById.restore();
+        model.updateSale.restore();
+      });
+      it('retorna o objeto esperado', async () => {
+        const result = await services.updateSale(1, mocks.newSale);
+        expect(result).to.be.deep.equal({saleId: 1, itemUpdated: mocks.newSale});
+      });
+    });
+  });
+  describe('Testa função deleteSale', () => {
+    describe('Caso o ID não exista', () => {
+      before(() => {
+        sinon.stub(model, 'getSaleById').returns([]);
+      });
+      after(() => {
+        model.getSaleById.restore();
+      });
+      it('Retorna false', async () => {
+        const result = await services.deleteSale(1);
+        expect(result).to.be.false;
+      });
+    });
+    describe('Caso o ID exista', () => {
+      before(() => {
+        sinon.stub(model, 'getSaleById').returns(mocks.sale);
+      });
+      after(() => {
+        model.getSaleById.restore();
+      });
+      it('Retorna true ', async () => {
+        const result = await services.deleteSale(1);
+        expect(result).to.be.true;
+      });
+    });
+  });
 });
