@@ -65,7 +65,7 @@ async function updtSale(req, res) {
 async function delSale(req, res) {
   try {
     const { id } = req.params;
-    const sale = deleteSale(id);
+    const sale = await deleteSale(id);
     if (sale) return res.status(NO_CONTENT).end();
     return res.status(NOT_FOUND).json({ message: 'Sale not found' }); 
   } catch (error) {
