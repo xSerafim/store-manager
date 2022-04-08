@@ -48,14 +48,15 @@ async function updateQuantity(sales, operation) {
       { id: sale.productId,
         quantity: resolvedPromise.flat()[index].quantity + sale.quantity,
       }));
-    productsModel.updateQuantity(sumQuantity);
+    await productsModel.updateQuantity(sumQuantity);
   }
+
   if (operation === 'registerSale') {
     const subQuantity = sales.map((sale, index) => (
       { id: sale.productId,
         quantity: resolvedPromise.flat()[index].quantity - sale.quantity,
       }));
-    productsModel.updateQuantity(subQuantity);
+    await productsModel.updateQuantity(subQuantity);
   }
 }
 

@@ -1,10 +1,4 @@
-const {
-  getAllSales,
-  getSaleById,
-  registerSale,
-  updateSale,
-  deleteSale,
-} = require('../services/sales');
+const services = require('../services/sales');
 
 const HTTP_OK_STATUS = 200;
 const CREATED_STATUS = 201;
@@ -19,7 +13,7 @@ function serverError(res, error) {
 
 async function allSales(_req, res) {
   try {
-    const sales = await getAllSales();
+    const sales = await services.getAllSales();
     return res.status(HTTP_OK_STATUS).json(sales);
   } catch (error) {
     return serverError(res, error);
@@ -29,7 +23,7 @@ async function allSales(_req, res) {
 async function saleById(req, res) {
   try {
     const { id } = req.params;
-    const sale = await getSaleById(id);
+    const sale = await services.getSaleById(id);
 
     if (!sale[0]) return res.status(NOT_FOUND).json({ message: 'Sale not found' });
 
@@ -43,7 +37,7 @@ async function saleById(req, res) {
 async function registerNewSale(req, res) {
   try {
     const sales = req.body;
-    const newSales = await registerSale(sales);
+    const newSales = await services.registerSale(sales);
     return res.status(CREATED_STATUS).json(newSales);
   } catch (error) {
     return serverError(res, error);
@@ -54,7 +48,7 @@ async function updtSale(req, res) {
   try {
     const { id } = req.params;
     const sales = req.body;
-    const updatedSale = await updateSale(id, sales);
+    const updatedSale = await services.updateSale(id, sales);
     if (updatedSale) return res.status(HTTP_OK_STATUS).json(updatedSale);
     return res.status(NOT_FOUND).json({ message: 'Sale not found' });
   } catch (error) {
@@ -65,7 +59,7 @@ async function updtSale(req, res) {
 async function delSale(req, res) {
   try {
     const { id } = req.params;
-    const sale = await deleteSale(id);
+    const sale = await services.deleteSale(id);
     if (sale) return res.status(NO_CONTENT).end();
     return res.status(NOT_FOUND).json({ message: 'Sale not found' }); 
   } catch (error) {
