@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 const connection = require('../../../models/connection');
+const serviceProduct = require('../../../services/products');
 const services = require('../../../services/sales');
 const model = require('../../../models/salesModel');
 const mocks = require('../mocks/salesData');
@@ -110,9 +111,13 @@ describe('Testa camada de services sales', () => {
     describe('Caso o ID exista', () => {
       before(() => {
         sinon.stub(model, 'getSaleById').returns(mocks.sale);
+        sinon.stub(model, 'deleteSale');
+        sinon.stub(serviceProduct, 'updateQuantity');
       });
       after(() => {
         model.getSaleById.restore();
+        model.deleteSale.restore();
+        serviceProduct.updateQuantity.restore();
       });
       it('Retorna true ', async () => {
         const result = await services.deleteSale(1);
