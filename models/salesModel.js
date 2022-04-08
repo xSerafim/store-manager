@@ -74,6 +74,10 @@ async function deleteSale(id) {
     'DELETE FROM sales WHERE id = ?;',
     [id],
   );
+  await connection.execute(
+    'DELETE FROM sales_products WHERE sale_id = ?;',
+    [id],
+  );
 }
 
 module.exports = {
