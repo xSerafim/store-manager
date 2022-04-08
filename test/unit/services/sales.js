@@ -111,13 +111,13 @@ describe('Testa camada de services sales', () => {
     describe('Caso o ID exista', () => {
       before(() => {
         sinon.stub(model, 'getSaleById').returns(mocks.sale);
-        sinon.stub(model, 'deleteSale');
         sinon.stub(serviceProduct, 'updateQuantity');
+        sinon.stub(model, 'deleteSale');
       });
       after(() => {
         model.getSaleById.restore();
-        model.deleteSale.restore();
         serviceProduct.updateQuantity.restore();
+        model.deleteSale.restore();
       });
       it('Retorna true ', async () => {
         const result = await services.deleteSale(1);

@@ -144,4 +144,30 @@ describe('Testa camada de services products', () => {
       });
     });
   });
+  describe('Testa função updateQuantity', () => {
+    describe('Chama as funções productById e updateQuantity', () => {
+      beforeEach(() => {
+        sinon.stub(model, 'updateQuantity');
+        sinon.stub(model, 'getProductById')
+          .onCall(0)
+          .resolves(mocks.products[0])
+          .onCall(1)
+          .resolves(mocks.products[1]);
+      });
+      afterEach(() => {
+        model.getProductById.restore();
+        model.updateQuantity.restore();
+      });
+      it('Caso operation seja deleteSale', async () => {
+        await services.updateQuantity(mocks.salesProducts, 'deleteSale');
+        expect(model.getProductById.calledTwice).to.be.true;
+        expect(model.updateQuantity.calledOnce).to.be.true;
+      });
+      it('Caso operation seja registerSale', async () => {
+        await services.updateQuantity(mocks.salesProducts, 'registerSale');
+        expect(model.getProductById.calledTwice).to.be.true;
+        expect(model.updateQuantity.calledOnce).to.be.true;
+      });
+    });
+  });
 });
