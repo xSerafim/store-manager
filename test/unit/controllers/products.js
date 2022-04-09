@@ -212,6 +212,7 @@ describe('Testa camada Controller de products', () => {
     before(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns(response);
+      response.end = sinon.stub().returns(response);
     });
 
     describe('Caso o produto exista', () => {
@@ -224,6 +225,7 @@ describe('Testa camada Controller de products', () => {
       it('Retorna status 204', async () => {
         await controller.delProduct(request, response);
         expect(response.status.calledWith(204)).to.be.true;
+        expect(response.end.called).to.be.true;
       });
     });
 
