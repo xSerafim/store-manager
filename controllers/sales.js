@@ -1,22 +1,17 @@
 const services = require('../services/sales');
+const errorHandler = require('../utils/serverError');
 
 const HTTP_OK_STATUS = 200;
 const CREATED_STATUS = 201;
 const NO_CONTENT = 204;
-const SERVER_ERROR = 500;
 const NOT_FOUND = 404;
-
-function serverError(res, error) {
-  console.log(error);
-  return res.status(SERVER_ERROR).json({ message: 'Erro no servidor' });
-}
 
 async function allSales(_req, res) {
   try {
     const sales = await services.getAllSales();
     return res.status(HTTP_OK_STATUS).json(sales);
   } catch (error) {
-    return serverError(res, error);
+    return errorHandler.serverError(res, error);
   }
 }
 
@@ -30,7 +25,7 @@ async function saleById(req, res) {
     sale.forEach((e) => delete e.saleId);
     return res.status(HTTP_OK_STATUS).json(sale);
   } catch (error) {
-    return serverError(res, error);
+    return errorHandler.serverError(res, error);
   }
 }
 
@@ -40,7 +35,7 @@ async function registerNewSale(req, res) {
     const newSales = await services.registerSale(sales);
     return res.status(CREATED_STATUS).json(newSales);
   } catch (error) {
-    return serverError(res, error);
+    return errorHandler.serverError(res, error);
   }
 }
 
@@ -52,7 +47,7 @@ async function updtSale(req, res) {
     if (updatedSale) return res.status(HTTP_OK_STATUS).json(updatedSale);
     return res.status(NOT_FOUND).json({ message: 'Sale not found' });
   } catch (error) {
-    return serverError(res, error);
+    return errorHandler.serverError(res, error);
   }
 }
 
@@ -63,7 +58,7 @@ async function delSale(req, res) {
     if (sale) return res.status(NO_CONTENT).end();
     return res.status(NOT_FOUND).json({ message: 'Sale not found' }); 
   } catch (error) {
-    return serverError(res, error);
+    return errorHandler.serverError(res, error);
   }
 }
 
