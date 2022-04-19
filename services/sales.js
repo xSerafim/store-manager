@@ -1,5 +1,5 @@
 const salesModel = require('../models/salesModel');
-const { updateQuantity } = require('./products');
+const productsService = require('./products');
 
 async function getAllSales() {
   const result = await salesModel.getAllSales();
@@ -13,7 +13,7 @@ async function getSaleById(id) {
 
 async function registerSale(sales) {
   const result = await salesModel.registerSale(sales);
-  const isUpdated = updateQuantity(result.itemsSold, 'registerSale');
+  const isUpdated = await productsService.updateQuantity(result.itemsSold, 'registerSale');
   if (isUpdated) return false;
   return result;
 }
@@ -33,7 +33,7 @@ async function deleteSale(id) {
   const saleExists = await getSaleById(id);
 
   if (!saleExists[0]) return false;
-  updateQuantity(saleExists, 'deleteSale');
+  productsService.updateQuantity(saleExists, 'deleteSale');
   await salesModel.deleteSale(id);
 
   return true;
