@@ -48,19 +48,41 @@ describe('Testa camada de services sales', () => {
     });
   });
   describe('Testa função registerSale', () => {
-    before(() => {
-      sinon.stub(connection, "execute").resolves(mocks.insertId);
+    describe('Caso updateQuantity seja false', () => {
+      before(() => {
+        sinon.stub(connection, "execute").resolves(mocks.insertId);
+        sinon.stub(serviceProduct, "updateQuantity").resolves(false);
+      });
+      after(() => {
+        connection.execute.restore();
+        serviceProduct.updateQuantity.restore();
+      });
+      it('Connection é chamado', async () => {
+        await services.registerSale(mocks.newSale);
+        expect(connection.execute.called).to.be.true;
+      });
+      it('Retorna o objeto esperado', async () => {
+        const sales = await services.registerSale(mocks.newSale);
+        expect(sales).to.be.deep.equal({ id: 4, itemsSold: mocks.newSale });
+      });
     });
-    after(() => {
-      connection.execute.restore();
-    });
-    it('Connection é chamado', async () => {
-      await services.registerSale(mocks.newSale);
-      expect(connection.execute.called).to.be.true;
-    });
-    it('Retorna o objeto esperado', async () => {
-      const sales = await services.registerSale(mocks.newSale);
-      expect(sales).to.be.deep.equal({ id: 4, itemsSold: mocks.newSale });
+    describe('Caso updateQuantity seja true', () => {
+      before(() => {
+        sinon.stub(connection, "execute").resolves(mocks.insertId);
+        sinon.stub(serviceProduct, "updateQuantity").resolves(true);
+      });
+      after(() => {
+        connection.execute.restore();
+        serviceProduct.updateQuantity.restore();
+      });
+      it('Connection é chamado', async () => {
+        await services.registerSale(mocks.newSale);
+        expect(connection.execute.called).to.be.true;
+      });
+      it('Retorna o objeto esperado', async () => {
+        const sales = await services.registerSale(mocks.newSale);
+        expect(sales).to.be.false;
+      });
     });
   });
   describe('Testa função updateSale', () => {

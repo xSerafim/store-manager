@@ -121,6 +121,20 @@ describe('Testa camada controllers de sales', () => {
       });
     });
 
+    describe('Caso a quantidade de produtos em estoque seja menor que 0', () => {
+      before(() => {
+        sinon.stub(services, 'registerSale').resolves(false);
+      });
+      after(() => {
+        services.registerSale.restore();
+      });
+      it('Retorna status 422 e mensagem de erro', async () => {
+        await controller.registerNewSale(request, response);
+        expect(response.status.calledWith(422)).to.be.true;
+        expect(response.json.calledWith({ message: 'Such amount is not permitted to sell' })).to.be.true;
+      });
+    });
+
     describe('Caso de erro', () => {
       before(() => {
         sinon.stub(services, 'registerSale').throws(() => new Error('Deu Ruim'));
