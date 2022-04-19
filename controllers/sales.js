@@ -33,6 +33,10 @@ async function registerNewSale(req, res) {
   try {
     const sales = req.body;
     const newSales = await services.registerSale(sales);
+    if (!newSales) {
+      return res.status(422)
+        .json({ message: 'Such amount is not permitted to sell' });
+    }
     return res.status(CREATED_STATUS).json(newSales);
   } catch (error) {
     return errorHandler.serverError(res, error);

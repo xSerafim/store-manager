@@ -13,8 +13,8 @@ async function getSaleById(id) {
 
 async function registerSale(sales) {
   const result = await salesModel.registerSale(sales);
-  updateQuantity(result.itemsSold, 'registerSale');
-
+  const isUpdated = updateQuantity(result.itemsSold, 'registerSale');
+  if (isUpdated) return false;
   return result;
 }
 
@@ -24,7 +24,7 @@ async function updateSale(id, sales) {
   if (!saleExists[0]) return false;
 
   const result = await salesModel.updateSale(id, sales);
-  updateQuantity(result.itemUpdated);
+  // updateQuantity(result.itemUpdated);
 
   return result;
 }
